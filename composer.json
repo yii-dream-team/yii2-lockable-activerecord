@@ -1,5 +1,5 @@
 {
-    "name": "yii-dream-team/yii2-lockable-active-record",
+    "name": "yii-dream-team/yii2-lockable-activerecord",
     "description": "Pessimistic locking behavior for Yii2 ActiveRecord",
 	"keywords": ["yii2", "behavior", "activerecord", "lock"],
 	"type": "yii-extension",
