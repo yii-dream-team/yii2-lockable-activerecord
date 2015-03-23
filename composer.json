@@ -1,0 +1,23 @@
+{
+    "name": "yii-dream-team/yii2-lockable-active-record",
+    "description": "Pessimistic locking behavior for Yii2 ActiveRecord",
+	"keywords": ["yii2", "behavior", "activerecord", "lock"],
+	"type": "yii-extension",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Alexey Samoylov",
+            "email": "alexey.samoylov@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.4.0",
+        "yiisoft/yii2": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "yiidreamteam\\behaviors\\": "./src"
+        }
+    }
+}
