@@ -47,6 +47,8 @@ Use model locks in transaction.
         throw $e;
     }
     
+## TODO ##
+Tables with compound primary keys are not supported.
     
 ## Licence ##
 
