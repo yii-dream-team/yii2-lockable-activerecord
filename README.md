@@ -7,11 +7,11 @@ The preferred way to install this extension is through [composer](http://getcomp
 
 Either run
 
-    php composer.phar require --prefer-dist yii-dream-team/yii2-jstree "*"
+    php composer.phar require --prefer-dist yii-dream-team/yii2-lockable-activerecord "*"
 
 or add
 
-    "yii-dream-team/yii2-jstree": "*"
+    "yii-dream-team/yii2-lockable-activerecord": "*"
 
 to the `require` section of your composer.json.
 
@@ -33,19 +33,20 @@ Add @mixin phpdoc to you class definition.
      *
      * @mixin \yiidreamteam\behaviors\LockableActiveRecord
      */
-    class Wallet extends ActiveRecord { ... }
+    class Sample extends ActiveRecord { ... }
     
 Use model locks in transaction.
 
     $dbTransaction = $model->getDb()->beginTransaction(\yii\db\Transaction::SERIALIZABLE);
     try {
         $model->lockForUpdate();
-        $model->doSomeThingWhileLocked();
+        $model->doSomethingWhileLocked();
         $dbTransaction->commit();
     } catch(\Exception $e) {
         $dbTransaction->rollBack();
         throw $e;
     }
+    
     
 ## Licence ##
 
