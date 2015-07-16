@@ -1,5 +1,6 @@
-# yii2-lockable-active-record
-Pessimistic locking behavior for Yii2 ActiveRecord
+# Pessimistic locking behavior for Yii2 ActiveRecord
+
+This package allows you to use pessimistic locking (select for update) when you work with ActiveRecord models.
 
 ## Installation ##
 
