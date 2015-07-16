@@ -57,5 +57,6 @@ MIT
     
 ## Links ##
 
-* http://yiidreamteam.com/yii2/lockable-activerecord
-* https://dev.mysql.com/doc/refman/5.6/en/innodb-locking-reads.html
+* [Official site](http://yiidreamteam.com/yii2/lockable-activerecord)
+* [Composer package](https://packagist.org/packages/yii-dream-team/yii2-lockable-activerecord)
+* [More info about the InnoDB read locking](https://dev.mysql.com/doc/refman/5.6/en/innodb-locking-reads.html)
