@@ -57,5 +57,5 @@ MIT
     
 ## Links ##
 
-* http://yiidreamteam.com/yii2/lockable-active-record
+* http://yiidreamteam.com/yii2/lockable-activerecord
 * https://dev.mysql.com/doc/refman/5.6/en/innodb-locking-reads.html
