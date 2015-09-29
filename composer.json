@@ -8,6 +8,10 @@
         {
             "name": "Alexey Samoylov",
             "email": "alexey.samoylov@gmail.com"
+        },
+        {
+            "name": "Valentin Konusov",
+            "email": "rlng-krsk@yandex.ru"
         }
     ],
     "minimum-stability": "dev",

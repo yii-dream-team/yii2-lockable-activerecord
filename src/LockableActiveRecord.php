@@ -6,7 +6,6 @@
  */
 namespace yiidreamteam\behaviors;
 
-use Guzzle\Common\Exception\BadMethodCallException;
 use yii\base\Behavior;
 use yii\base\InvalidConfigException;
 use yii\db\ActiveRecord;
@@ -31,20 +30,29 @@ class LockableActiveRecord extends Behavior
         parent::attach($owner);
     }
 
+    /**
+     * Lock for Update
+     */
     public function lockForUpdate()
     {
         $this->lockInternal(self::LOCK_FOR_UPDATE);
     }
 
+    /**
+     * Lock for Share Mode
+     */
     public function lockShareMode()
     {
         $this->lockInternal(self::LOCK_SHARE_MODE);
     }
 
+    /**
+     * Checks for the existence of the DB transaction
+     */
     private function checkTransaction()
     {
         if ($this->owner->getDb()->getTransaction() === null)
-            throw new BadMethodCallException('Running transaction is required');
+            throw new \BadMethodCallException('Running transaction is required');
     }
 
     /**
@@ -57,7 +65,7 @@ class LockableActiveRecord extends Behavior
         /** @var ActiveRecord $model */
         $model = $this->owner;
         $pk = ArrayHelper::getValue($model::primaryKey(), 0);
-        $model->getDb()->createCommand('SELECT 1 FROM ' . $model->tableName() . ' WHERE ' . $pk . ' = :pk ' . $param, [
+        $model->getDb()->createCommand("SELECT 1 FROM {$model->tableName()} WHERE {$pk} = :pk {$param}", [
             ':pk' => $model->getPrimaryKey(),
         ])->execute();
     }
