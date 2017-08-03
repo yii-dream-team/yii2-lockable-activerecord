@@ -40,16 +40,13 @@ Use model locks in transaction.
 
     $dbTransaction = $model->getDb()->beginTransaction(\yii\db\Transaction::SERIALIZABLE);
     try {
-        $model->lockForUpdate();
+        $model->lock();
         $model->doSomethingWhileLocked();
         $dbTransaction->commit();
     } catch(\Exception $e) {
         $dbTransaction->rollBack();
         throw $e;
     }
-    
-## TODO ##
-Tables with compound primary keys are not supported.
     
 ## Licence ##
 
@@ -59,4 +56,5 @@ MIT
 
 * [Official site](http://yiidreamteam.com/yii2/lockable-activerecord)
 * [Composer package](https://packagist.org/packages/yii-dream-team/yii2-lockable-activerecord)
-* [More info about the InnoDB read locking](https://dev.mysql.com/doc/refman/5.6/en/innodb-locking-reads.html)
+* [Locking in MySQL InnoDB](https://dev.mysql.com/doc/refman/5.7/en/innodb-locking-reads.html)
+* [Locking in PostgreSQL](https://www.postgresql.org/docs/9.4/static/explicit-locking.html)

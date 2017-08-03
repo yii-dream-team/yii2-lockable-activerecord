@@ -4,69 +4,79 @@
  *
  * @see https://dev.mysql.com/doc/refman/5.6/en/innodb-locking-reads.html
  */
+
 namespace yiidreamteam\behaviors;
 
 use yii\base\Behavior;
 use yii\base\InvalidConfigException;
 use yii\db\ActiveRecord;
-use yii\helpers\ArrayHelper;
+use yii\db\Expression;
 
 /**
  * Class LockableActiveRecord
  * @package yiidreamteam\behaviors
+ *
+ * @property ActiveRecord $owner
  */
 class LockableActiveRecord extends Behavior
 {
-    const LOCK_SHARE_MODE = 'LOCK IN SHARE MODE';
-    const LOCK_FOR_UPDATE = 'FOR UPDATE';
-
     /**
      * @inheritdoc
      */
     public function attach($owner)
     {
-        if (!$owner instanceof ActiveRecord)
-            throw new InvalidConfigException('Please attach this behavior to the instance of the ActiveRecord class');
+        if (!$owner instanceof ActiveRecord) {
+            throw new InvalidConfigException('Please attach this behavior to the instance of the ' . ActiveRecord::className());
+        }
         parent::attach($owner);
     }
 
     /**
-     * Lock for Update
+     * @param string $mode
+     * @throws \yii\db\Exception
+     * @link https://dev.mysql.com/doc/refman/5.7/en/innodb-locking-reads.html
+     * @link https://www.postgresql.org/docs/9.4/static/explicit-locking.html
      */
-    public function lockForUpdate()
+    public function lock($mode = 'FOR UPDATE')
     {
-        $this->lockInternal(self::LOCK_FOR_UPDATE);
-    }
+        $this->ensureTransaction();
+        /** @var ActiveRecord $model */
+        $model = $this->owner;
 
-    /**
-     * Lock for Share Mode
-     */
-    public function lockShareMode()
-    {
-        $this->lockInternal(self::LOCK_SHARE_MODE);
+        $pk = $model->getPrimaryKey(true);
+        $sql = $model::find()->select(new Expression('1'))->andWhere($pk)->createCommand()->getRawSql() . ' ' . $mode;
+
+        $model->getDb()->createCommand($sql)->execute();
     }
 
     /**
      * Checks for the existence of the DB transaction
      */
-    private function checkTransaction()
+    private function ensureTransaction()
     {
-        if ($this->owner->getDb()->getTransaction() === null)
-            throw new \BadMethodCallException('Running transaction is required');
+        if ($this->owner->getDb()->getTransaction() === null) {
+            throw new \BadMethodCallException('Active transaction is required');
+        }
     }
 
     /**
-     * @param string $param
-     * @throws \yii\db\Exception
+     * Lock for update.
+     *
+     * @deprecated Use {@see lock()} directly
      */
-    private function lockInternal($param)
+    public function lockForUpdate()
     {
-        $this->checkTransaction();
-        /** @var ActiveRecord $model */
-        $model = $this->owner;
-        $pk = ArrayHelper::getValue($model::primaryKey(), 0);
-        $model->getDb()->createCommand("SELECT 1 FROM {$model->tableName()} WHERE {$pk} = :pk {$param}", [
-            ':pk' => $model->getPrimaryKey(),
-        ])->execute();
+        $this->lock();
+    }
+
+    /**
+     * Lock in share mode.
+     * Warning: MySQL only.
+     *
+     * @deprecated Use {@see lock()} directly
+     */
+    public function lockShareMode()
+    {
+        $this->lock('LOCK IN SHARE MODE');
     }
 }
